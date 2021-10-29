@@ -1,0 +1,140 @@
+id: 'opencspm-softserve-community-controls'
+title: 'Darkbit Community Controls'
+description: 'This checks the majority of the AWS 1.3.0 and GCP CIS 1.1 Benchmark controls'
+controls:
+  #GCP
+  - id: new-gcp-13
+    title: GCP Test Healcare API
+    description:
+      Check the module
+    remediation:
+      For each firewall rule, assess whether the attached systems requires
+    validation: |-
+      In each project, run the following command and ensure no entries that
+      permit `IPProtocol` of `tcp` and `ports` of `3306`.
+
+      ```
+      gcloud compute firewall-rules list \
+        --format=json | jq -r '.[] |
+          select(.sourceRanges) |
+          select(.allowed) |
+          select(.sourceRanges[] |
+          contains("0.0.0.0/0")) | "\(.name) \(.allowed[])"'
+      ```
+    impact: 8
+    effort: 4
+    platform: GCP
+    category: HealthCare API
+    resource: HealthCare
+    nodes:
+      - GCP_HEALTHCARE
+    refs:
+      - text: Configuring Firewall Rules
+        url: https://cloud.google.com/vpn/docs/how-to/configuring-firewall-rules
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level2
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-3
+          - gcp-cis1.1-3.6
+      - nist-csf:
+          - nist-csf-pr
+          - nist-csf-pr.ac
+          - nist-csf-pr.ac-3
+      - hipaa:
+          - hipaa-164.308(e)
+          - hipaa-164.308(e)(2)(i)
+      - google cloud
+  - id: new-gcp-16
+    title: Ensure That All BigQuery Tables Are Encrypted With Customer-Managed Encryption Key (CMEK)
+    description: |
+      BigQuery by default encrypts the data as rest by employing Envelope Encryption using
+      Google managed cryptographic keys. The data is encrypted using the data encryption
+      keys and data encryption keys themselves are further encrypted using key encryption keys.
+    remediation: |-
+      View the table details. Verify the kmsKeyName is present.
+
+      ```
+      bq show <table_object>
+      ```
+
+      Use the following command to copy the data. The source and the destination needs to be same in case
+      copying to the original table.
+
+      ```
+      bq cp --destination_kms_key <customer_managed_key> source_dataset.source_table \
+      destination_dataset.destination_table
+      ```
+    validation: |-
+      Verify the kmsKeyName is present.
+
+      ```
+      bq show <table_object>
+      ```
+    impact: 8
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: BigQuery
+    nodes:
+      - GCP_BIGQUERY_DATASET
+    refs:
+      - text: Google Managed keys
+        url: https://https://cloud.google.com/bigquery/docs/customer-managed-encryption
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: new-gcp-17
+    title: HealthCare API Should Be Enabled
+    description: |
+      Vulnerabilities in software packages can be exploited by hackers or malicious users to
+      obtain unauthorized access to local cloud resources. GCR Container Analysis and other
+      third party products allow images stored in GCR to be scanned for known vulnerabilities.
+    remediation: |-
+      Enable the container scanning API.
+
+      ```
+      gcloud services enable containerscanning.googleapis.com
+      ```
+    validation: |-
+      List enabled APIs and confirm that `Container Scanning API` is listed in the output.
+
+      ```
+      gcloud services list --enabled --filter=healthcare
+      ```
+    impact: 6
+    effort: 5
+    platform: GCP
+    category: HealthCare
+    resource: GCR
+    nodes:
+      - GCP_CLOUDRESOURCEMANAGER_PROJECT
+    refs:
+      - text: Container analysis and vulnerability scanning
+        url: https://cloud.google.com/container-registry/docs/container-analysis
+    public: true
+    tags:
+      - cis:
+          - gke-cis1.1
+          - gke-cis1.1-level1
+          - gke-cis1.1-scored
+          - gke-cis1.1-5
+          - gke-cis1.1-5.1
+          - gke-cis1.1-5.1.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
