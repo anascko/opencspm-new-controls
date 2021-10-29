@@ -9,7 +9,7 @@ control_pack = config_file['id']
 titles = Hash[config_file['controls'].map { |control| [control['id'], control['title']] }]
 
 # GCP
-control_id = 'darkbit-gcp-6'
+control_id = 'rule-gcp-6'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_IDENTITY)-[r:HAS_IAMROLE]-(p:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -36,7 +36,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-14'
+control_id = 'rule-gcp-14'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (s:GCP_COMPUTE_SUBNETWORK)
@@ -65,7 +65,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-15'
+control_id = 'rule-gcp-15'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (range:GCP_COMPUTE_FIREWALLIPRANGE { name: "0.0.0.0/0"})<-[:HAS_SOURCEIPRANGE]-(f:GCP_COMPUTE_FIREWALL { resource_data_direction: "INGRESS", resource_data_disabled: "false" })-[rule:HAS_FIREWALLRULE { action: "allow"}]->(proto:GCP_COMPUTE_NETWORKPROTOCOL)
@@ -90,7 +90,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-17'
+control_id = 'rule-gcp-17'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (i:GCP_COMPUTE_INSTANCE)
@@ -117,7 +117,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-18'
+control_id = 'rule-gcp-18'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (v:GCP_COMPUTE_NETWORK)
@@ -142,7 +142,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-19'
+control_id = 'rule-gcp-19'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sa:GCP_IAM_SERVICEACCOUNTKEY)
@@ -169,7 +169,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-20'
+control_id = 'rule-gcp-20'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
    MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -201,7 +201,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-22'
+control_id = 'rule-gcp-22'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (instance:GCP_SQLADMIN_INSTANCE)
@@ -225,7 +225,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-23'
+control_id = 'rule-gcp-23'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (instance:GCP_SQLADMIN_INSTANCE)
@@ -249,7 +249,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-26'
+control_id = 'rule-gcp-26'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (range:GCP_COMPUTE_FIREWALLIPRANGE { name: "0.0.0.0/0"})<-[:HAS_SOURCEIPRANGE]-(f:GCP_COMPUTE_FIREWALL { resource_data_direction: "INGRESS", resource_data_disabled: "false" })-[rule:HAS_FIREWALLRULE { action: "allow"}]->(proto:GCP_COMPUTE_NETWORKPROTOCOL)
@@ -274,7 +274,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-33'
+control_id = 'rule-gcp-33'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (httpsproxy:GCP_COMPUTE_TARGETHTTPSPROXY)
@@ -301,7 +301,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-38'
+control_id = 'rule-gcp-38'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -325,7 +325,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-39'
+control_id = 'rule-gcp-39'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -352,7 +352,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-40'
+control_id = 'rule-gcp-40'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -376,7 +376,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-41'
+control_id = 'rule-gcp-41'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_NODEPOOL)-[r:HAS_SERVICEACCOUNT]->(gi:GCP_IDENTITY)
@@ -400,7 +400,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-42'
+control_id = 'rule-gcp-42'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -424,7 +424,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-44'
+control_id = 'rule-gcp-44'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -448,7 +448,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-47'
+control_id = 'rule-gcp-47'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -472,7 +472,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-48'
+control_id = 'rule-gcp-48'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -496,7 +496,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-50'
+control_id = 'rule-gcp-50'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_NODEPOOL)
@@ -520,7 +520,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-52'
+control_id = 'rule-gcp-52'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_NODEPOOL)
@@ -544,7 +544,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-53'
+control_id = 'rule-gcp-53'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_NODEPOOL)
@@ -568,7 +568,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-55'
+control_id = 'rule-gcp-55'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -592,7 +592,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-56'
+control_id = 'rule-gcp-56'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -616,7 +616,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-59'
+control_id = 'rule-gcp-59'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (instance:GCP_SQLADMIN_INSTANCE)
@@ -642,7 +642,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-60'
+control_id = 'rule-gcp-60'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_IDENTITY { member_type: 'serviceAccount' })-[r:HAS_IAMROLE]-(p:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -671,7 +671,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-61'
+control_id = 'rule-gcp-61'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -695,7 +695,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-62'
+control_id = 'rule-gcp-62'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sak:GCP_IAM_SERVICEACCOUNTKEY)
@@ -721,7 +721,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-63'
+control_id = 'rule-gcp-63'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (gi:GCP_IDENTITY)
@@ -754,7 +754,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-64'
+control_id = 'rule-gcp-64'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (gi:GCP_IDENTITY)-[ir1:HAS_IAMROLE]->(resource)
@@ -782,7 +782,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-65'
+control_id = 'rule-gcp-65'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (gi:GCP_IDENTITY { name: "allUsers"})
@@ -818,7 +818,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-66'
+control_id = 'rule-gcp-66'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (key:GCP_CLOUDKMS_CRYPTOKEY)
@@ -845,7 +845,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-67'
+control_id = 'rule-gcp-67'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (gi:GCP_IDENTITY)-[ir1:HAS_IAMROLE]->(resource)
@@ -874,7 +874,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
 end
 
 # FUTURE: Traverse PROJECT or FOLDER for any GCP_LOGGING_LOGSINK
-control_id = 'darkbit-gcp-72'
+control_id = 'rule-gcp-72'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (p:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -902,7 +902,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
 end
 
 # FUTURE: Log sink -> Storage Bucket
-control_id = 'darkbit-gcp-73'
+control_id = 'rule-gcp-73'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (ls:GCP_LOGGING_LOGSINK)-[:LOGS_TO]->(b:GCP_STORAGE_BUCKET)
@@ -928,7 +928,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
 end
 
 # FUTURE: Parse up folder chain and check for alert metrics
-control_id = 'darkbit-gcp-74'
+control_id = 'rule-gcp-74'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -962,7 +962,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
 end
 
 # FUTURE: Parse up folder chain and check for alert metrics
-control_id = 'darkbit-gcp-75'
+control_id = 'rule-gcp-75'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -992,7 +992,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
 end
 
 # FUTURE: Parse up folder chain and check for alert metrics
-control_id = 'darkbit-gcp-76'
+control_id = 'rule-gcp-76'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -1023,7 +1023,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
 end
 
 # FUTURE: Parse up folder chain and check for alert metrics
-control_id = 'darkbit-gcp-77'
+control_id = 'rule-gcp-77'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -1054,7 +1054,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
 end
 
 # FUTURE: Parse up folder chain and check for alert metrics
-control_id = 'darkbit-gcp-78'
+control_id = 'rule-gcp-78'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -1088,7 +1088,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
 end
 
 # FUTURE: Parse up folder chain and check for alert metrics
-control_id = 'darkbit-gcp-79'
+control_id = 'rule-gcp-79'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -1118,7 +1118,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
 end
 
 # FUTURE: Parse up folder chain and check for alert metrics
-control_id = 'darkbit-gcp-80'
+control_id = 'rule-gcp-80'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -1145,7 +1145,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-81'
+control_id = 'rule-gcp-81'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (v:GCP_COMPUTE_NETWORK)
@@ -1170,7 +1170,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-82'
+control_id = 'rule-gcp-82'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (zone:GCP_DNS_MANAGEDZONE)
@@ -1194,7 +1194,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-83'
+control_id = 'rule-gcp-83'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (zone:GCP_DNS_MANAGEDZONE)
@@ -1230,7 +1230,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-84'
+control_id = 'rule-gcp-84'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (zone:GCP_DNS_MANAGEDZONE)
@@ -1266,7 +1266,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-85'
+control_id = 'rule-gcp-85'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_COMPUTE_INSTANCE)-[r:HAS_SERVICEACCOUNT]->(gi:GCP_IDENTITY)
@@ -1291,7 +1291,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-86'
+control_id = 'rule-gcp-86'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (i:GCP_COMPUTE_INSTANCE)
@@ -1317,7 +1317,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-87'
+control_id = 'rule-gcp-87'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (gce:GCP_COMPUTE_INSTANCE)
@@ -1343,7 +1343,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-88'
+control_id = 'rule-gcp-88'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (gce:GCP_COMPUTE_INSTANCE)
@@ -1369,7 +1369,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-89'
+control_id = 'rule-gcp-89'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (gce:GCP_COMPUTE_INSTANCE)
@@ -1395,7 +1395,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-90'
+control_id = 'rule-gcp-90'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (i:GCP_COMPUTE_INSTANCE)
@@ -1420,7 +1420,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-91'
+control_id = 'rule-gcp-91'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (instance:GCP_COMPUTE_INSTANCE)-[:HAS_DISK]->(disk:GCP_COMPUTE_DISK)
@@ -1445,7 +1445,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-92'
+control_id = 'rule-gcp-92'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH  (i:GCP_COMPUTE_INSTANCE)
@@ -1475,7 +1475,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-94'
+control_id = 'rule-gcp-94'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (gi:GCP_IDENTITY { name: "allUsers" })
@@ -1516,7 +1516,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-95'
+control_id = 'rule-gcp-95'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (b:GCP_STORAGE_BUCKET)
@@ -1540,7 +1540,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-97'
+control_id = 'rule-gcp-97'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1567,7 +1567,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-98'
+control_id = 'rule-gcp-98'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1594,7 +1594,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-99'
+control_id = 'rule-gcp-99'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1621,7 +1621,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-100'
+control_id = 'rule-gcp-100'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1648,7 +1648,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-101'
+control_id = 'rule-gcp-101'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1675,7 +1675,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-102'
+control_id = 'rule-gcp-102'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1702,7 +1702,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-103'
+control_id = 'rule-gcp-103'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1729,7 +1729,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-104'
+control_id = 'rule-gcp-104'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1756,7 +1756,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-105'
+control_id = 'rule-gcp-105'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1783,7 +1783,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-106'
+control_id = 'rule-gcp-106'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1810,7 +1810,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-107'
+control_id = 'rule-gcp-107'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sql:GCP_SQLADMIN_INSTANCE)
@@ -1836,7 +1836,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-108'
+control_id = 'rule-gcp-108'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (gi:GCP_IDENTITY { name: "allUsers" })
@@ -1877,7 +1877,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-109'
+control_id = 'rule-gcp-109'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -1901,7 +1901,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-110'
+control_id = 'rule-gcp-110'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)-[:HAS_RESOURCE]->(storagesvc:GCP_SERVICEUSAGE_SERVICE { resource_data_name: "containerregistry.googleapis.com"})
@@ -1929,7 +1929,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-111'
+control_id = 'rule-gcp-111'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (bucket:GCP_STORAGE_BUCKET)<-[:HAS_RESOURCE]-(project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -1983,7 +1983,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-112'
+control_id = 'rule-gcp-112'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (bucket:GCP_STORAGE_BUCKET)<-[:HAS_RESOURCE]-(project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -2022,7 +2022,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-113'
+control_id = 'rule-gcp-113'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_NODEPOOL)
@@ -2046,7 +2046,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-114'
+control_id = 'rule-gcp-114'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -2070,7 +2070,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-115'
+control_id = 'rule-gcp-115'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -2094,7 +2094,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-116'
+control_id = 'rule-gcp-116'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (cluster:GCP_CONTAINER_CLUSTER)-[:IN_SUBNETWORK]->(subnet:GCP_COMPUTE_SUBNETWORK)<-[:HAS_SUBNETWORK]-(vpc:GCP_COMPUTE_NETWORK)
@@ -2129,7 +2129,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-117'
+control_id = 'rule-gcp-117'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (ing:K8S_INGRESS)
@@ -2154,7 +2154,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-121'
+control_id = 'rule-gcp-121'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -2178,7 +2178,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-122'
+control_id = 'rule-gcp-122'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (instance:GCP_COMPUTE_INSTANCE)-[:HAS_DISK]->(disk:GCP_COMPUTE_DISK)
@@ -2203,7 +2203,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-123'
+control_id = 'rule-gcp-123'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -2227,7 +2227,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-124'
+control_id = 'rule-gcp-124'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (np:GCP_CONTAINER_NODEPOOL)
@@ -2252,7 +2252,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-125'
+control_id = 'rule-gcp-125'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -2276,7 +2276,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'darkbit-gcp-127'
+control_id = 'rule-gcp-127'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_CONTAINER_CLUSTER)
@@ -2301,7 +2301,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
 end
 
 # FUTURE: Parse up folder chain and check for alert metrics
-control_id = 'darkbit-gcp-128'
+control_id = 'rule-gcp-128'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -2332,7 +2332,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-2'
+control_id = 'rule-gcp-129'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (b:GCP_STORAGE_BUCKET)
@@ -2348,7 +2348,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-3'
+control_id = 'rule-gcp-130'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (gi:GCP_IDENTITY { name: "allUsers" })
@@ -2389,7 +2389,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-4'
+control_id = 'rule-gcp-131'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (c:GCP_IDENTITY { member_type: 'serviceAccount' })-[r:HAS_IAMROLE]-(p:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -2418,7 +2418,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-5'
+control_id = 'rule-gcp-132'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (i:GCP_COMPUTE_INSTANCE)
@@ -2445,7 +2445,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-6'
+control_id = 'rule-gcp-133'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sa:GCP_IAM_SERVICEACCOUNTKEY)
@@ -2472,7 +2472,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-7'
+control_id = 'rule-gcp-134'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
    MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -2504,7 +2504,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-8'
+control_id = 'rule-gcp-135'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (sak:GCP_IAM_SERVICEACCOUNTKEY)
@@ -2530,7 +2530,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-9'
+control_id = 'rule-gcp-136'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (range:GCP_COMPUTE_FIREWALLIPRANGE { name: "0.0.0.0/0"})<-[:HAS_SOURCEIPRANGE]-(f:GCP_COMPUTE_FIREWALL { resource_data_direction: "INGRESS", resource_data_disabled: "false" })-[rule:HAS_FIREWALLRULE { action: "allow"}]->(proto:GCP_COMPUTE_NETWORKPROTOCOL)
@@ -2555,7 +2555,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-10'
+control_id = 'rule-gcp-137'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (range:GCP_COMPUTE_FIREWALLIPRANGE { name: "0.0.0.0/0"})<-[:HAS_SOURCEIPRANGE]-(f:GCP_COMPUTE_FIREWALL { resource_data_direction: "INGRESS", resource_data_disabled: "false" })-[rule:HAS_FIREWALLRULE { action: "allow"}]->(proto:GCP_COMPUTE_NETWORKPROTOCOL)
@@ -2580,7 +2580,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-11'
+control_id = 'rule-gcp-138'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (range:GCP_COMPUTE_FIREWALLIPRANGE { name: "0.0.0.0/0"})<-[:HAS_SOURCEIPRANGE]-(f:GCP_COMPUTE_FIREWALL { resource_data_direction: "INGRESS", resource_data_disabled: "false" })-[rule:HAS_FIREWALLRULE { action: "allow"}]->(proto:GCP_COMPUTE_NETWORKPROTOCOL)
@@ -2605,7 +2605,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-12'
+control_id = 'rule-gcp-139'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (range:GCP_COMPUTE_FIREWALLIPRANGE { name: "0.0.0.0/0"})<-[:HAS_SOURCEIPRANGE]-(f:GCP_COMPUTE_FIREWALL { resource_data_direction: "INGRESS", resource_data_disabled: "false" })-[rule:HAS_FIREWALLRULE { action: "allow"}]->(proto:GCP_COMPUTE_NETWORKPROTOCOL)
@@ -2630,7 +2630,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-13'
+control_id = 'rule-gcp-140'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (h:GCP_HEALTHCARE_DATASET)<-[:HAS_RESOURCE]-(project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
@@ -2657,7 +2657,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-14'
+control_id = 'rule-gcp-141'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (s:GCP_COMPUTE_SUBNETWORK)
@@ -2682,7 +2682,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-15'
+control_id = 'rule-gcp-142'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)-[:HAS_RESOURCE]->(table:GCP_BIGQUERY_TABLE)
@@ -2706,7 +2706,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'new-gcp-17'
+control_id = 'rule-gcp-143'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)-[:HAS_RESOURCE]->(storagesvc:GCP_SERVICEUSAGE_SERVICE { resource_data_name: "healthcare.googleapis.com"})

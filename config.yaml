@@ -3,7 +3,7 @@ title: 'Darkbit Community Controls'
 description: 'This checks the majority of the AWS 1.3.0 and GCP CIS 1.1 Benchmark controls'
 controls:
   #GCP
-  - id: darkbit-gcp-6
+  - id: rule-gcp-6
     title:
       IAM.ServiceAccountUser and IAM.serviceAccountTokenCreator Should Not Be Granted
       at the Project Level
@@ -68,9 +68,9 @@ controls:
           - nist-csf-pr.ac-4
           - nist-csf-pr.ac-6
       - hipaa:
-          - hipaa-164.308-check
+          - hipaa-164.312(a)(2)(i)
       - google cloud
-  - id: darkbit-gcp-14
+  - id: rule-gcp-14
     title: VPC Flow Logging Should Be Enabled on All VPC Subnets
     description:
       VPC flow logs record metadata about all traffic flowing in and out
@@ -114,8 +114,10 @@ controls:
           - nist-csf-de.cm
           - nist-csf-de.cm-1
           - nist-csf-de.cm-7
+      - hipaa:
+          - hipaa- 164.312(b)
       - google cloud
-  - id: darkbit-gcp-15
+  - id: rule-gcp-15
     title: Firewall Rules Should Not Allow Access to SSH TCP/22 From All Hosts
     description:
       Firewall rules that permit inbound/ingress access from any IP address
@@ -165,10 +167,9 @@ controls:
           - nist-csf-pr.ds
           - nist-csf-pr.ds-5
       - hipaa:
-          - hipaa-164.308(e)
-          - hipaa-164.308(e)(2)(i)
+          - hipaa-164.312(a)(1)
       - google cloud
-  - id: darkbit-gcp-17
+  - id: rule-gcp-17
     title: GCE Instances Should Not Have Public IP Addresses
     description:
       GCE Instances should not have public IP addresses assigned directly
@@ -215,8 +216,10 @@ controls:
           - nist-csf-pr.ac-3
           - nist-csf-pr.ac-4
           - nist-csf-pr.ac-5
+      - hipaa:
+          - hipaa-164.312(e)(2)(i)
       - google cloud
-  - id: darkbit-gcp-18
+  - id: rule-gcp-18
     title: Default VPC Networks Should Not Be Present
     description:
       Each project contains a default VPC/Network with default subnets in
@@ -269,9 +272,9 @@ controls:
           - nist-csf-pr.pt
           - nist-csf-pr.pt-4
       - hipaa:
-          - hipa-164-check
+          - hipa-164.308(a)(3)(ii)(A)
       - google cloud
-  - id: darkbit-gcp-19
+  - id: rule-gcp-19
     title: User-Managed GCP Service Account Keys Should Not Be Older Than 90 Days
     description:
       GCP Service Account Keys that are created by an administrator are known
@@ -329,8 +332,10 @@ controls:
           - nist-csf-pr.ac-3
           - nist-csf-pr.ac-6
           - nist-csf-pr.ac-7
+      - hipaa:
+          - hipaa- 164.310(1)
       - google cloud
-  - id: darkbit-gcp-20
+  - id: rule-gcp-20
     title: GCP Projects Should Enable Data Access Logging
     description:
       GCP Audit logs automatically capture administrative activity logs for
@@ -401,8 +406,10 @@ controls:
           - nist-csf-pr
           - nist-csf-pr.pt
           - nist-csf-pr.pt-1
+      - hipaa:
+          - hipaa- 164.312(b)
       - google cloud
-  - id: darkbit-gcp-22
+  - id: rule-gcp-22
     title: Cloud SQL Instances Should Have a Private IP Address
     description:
       By default, Cloud SQL instances are assigned a public IPv4 address,
@@ -454,8 +461,10 @@ controls:
           - nist-csf-pr
           - nist-csf-pr.ac
           - nist-csf-pr.ac-5
+      - hipaa:
+          - hipaa- 164.312(c)(1)
       - google cloud
-  - id: darkbit-gcp-23
+  - id: rule-gcp-23
     title: Cloud SQL Instances Should Require SSL/TLS
     description:
       By default, Cloud SQL instances will accept both SSL/TLS and plaintext
@@ -506,8 +515,10 @@ controls:
           - nist-csf-pr.ac-7
           - nist-csf-pr.ds
           - nist-csf-pr.ds-2
+      - hipaa:
+          - hipaa-164.312(e)(2)(ii)
       - google cloud
-  - id: darkbit-gcp-26
+  - id: rule-gcp-26
     title: Firewall Rules Should Not Allow Access to RDP TCP/3389 From All Hosts
     description:
       Firewall rules that permit inbound/ingress access from any IP address
@@ -561,7 +572,7 @@ controls:
           - hipaa-164.312(e)
           - hipaa-164.312(e)(2)(i)
       - google cloud
-  - id: darkbit-gcp-33
+  - id: rule-gcp-33
     title: Load Balancers Should Use a MODERN or RESTRICTED SSL Policy
     description:
       By default, Load Balancers use an SSL/TLS policy equivalent to the
@@ -617,8 +628,11 @@ controls:
           - nist-csf-pr.ds-2
           - nist-csf-pr.pt
           - nist-csf-pr.pt-4
+      - hipaa:
+          - hipaa-164.312(e)
+          - hipaa-164.312(e)(2)(i)
       - google cloud
-  - id: darkbit-gcp-38
+  - id: rule-gcp-38
     title: GKE Network Policy Support Should Be Installed in All Clusters
     description:
       By default in Kubernetes, all Pods can communicate with each other
@@ -665,8 +679,10 @@ controls:
           - nist-csf-pr.ac-5
           - nist-csf-pr.ds
           - nist-csf-pr.ds-5
+      - hipaa:
+          - hipaa-164.310(a)(1)
       - google cloud
-  - id: darkbit-gcp-39
+  - id: rule-gcp-39
     title: GKE Control Plane Access Should Be Restricted to a Known Set of IP Ranges
     description:
       The Kubernetes API Server systems (Control Plane) expose the Kubernetes
@@ -717,8 +733,10 @@ controls:
           - nist-csf-pr.pt
           - nist-csf-pr.pt-3
           - nist-csf-pr.pt-4
+      - hipaa:
+          - hipaa-164.310(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-40
+  - id: rule-gcp-40
     title:
       GKE Workload Identity Should Be Enabled and Enforcing Metadata Protection
       on All Nodepools
@@ -781,8 +799,10 @@ controls:
           - nist-csf-pr.ds-2
           - nist-csf-pr.pt
           - nist-csf-pr.pt-3
+      - hipaa:
+          - hipaa-164.310(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-41
+  - id: rule-gcp-41
     title: GKE Node Pools Should Use Dedicated GCP Service Accounts
     description:
       By default, GKE associates the `default` compute service account to
@@ -843,8 +863,10 @@ controls:
           - nist-csf-pr.ip-1
           - nist-csf-pr.pt
           - nist-csf-pr.pt-3
+      - hipaa:
+          - hipaa-164.310(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-42
+  - id: rule-gcp-42
     title: GKE Node Pools Should Use Shielded GKE Nodes
     description:
       Starting in GKE 1.13.6 and later, GKE Worker nodes can be provisioned
@@ -913,8 +935,10 @@ controls:
           - nist-csf-pr.ds-8
           - nist-csf-pr.pt
           - nist-csf-pr.pt-5
+      - hipaa:
+          - hipaa-164.310(d)(1)
       - google cloud
-  - id: darkbit-gcp-44
+  - id: rule-gcp-44
     title: GKE Clusters Should Use a Private Cluster Endpoint/IP
     description:
       By default, GKE creates clusters with a public IP address on the control
@@ -966,8 +990,10 @@ controls:
           - nist-csf-pr.pt
           - nist-csf-pr.pt-3
           - nist-csf-pr.pt-4
+      - hipaa:
+          - hipaa-164.310(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-47
+  - id: rule-gcp-47
     title: GKE Intranode Visibility Should Be Enabled on All Clusters
     description:
       When enabling VPC Flow Logs on a VPC where GKE clusters are running,
@@ -1013,8 +1039,10 @@ controls:
           - nist-csf-de.cm
           - nist-csf-de.cm-1
           - nist-csf-de.cm-7
+      - hipaa:
+          - hipaa-164.310(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-48
+  - id: rule-gcp-48
     title: GKE Logs Should Be Sent to Stackdriver/Google Cloud Monitoring
     description:
       By default, GKE enables a Stackdriver log export managed add-on capability
@@ -1060,8 +1088,10 @@ controls:
           - nist-csf-de.ae
           - nist-csf-de.ae-1
           - nist-csf-de.ae-2
+      - hipaa:
+          - hipaa- 164.312(b)
       - google cloud
-  - id: darkbit-gcp-50
+  - id: rule-gcp-50
     title: GKE Node Pools Should Use the COS or COS_CONTAINERD Operating System
     description:
       GKE Nodes can leverage either Container-Optimized OS or Ubuntu-based
@@ -1131,7 +1161,7 @@ controls:
           - nist-csf-pr.pt
           - nist-csf-pr.pt-3
       - google cloud
-  - id: darkbit-gcp-52
+  - id: rule-gcp-52
     title: GKE Node Pools Should Enable AutoRepair
     description:
       GKE Nodes have several health checks that continuously run to validate
@@ -1173,7 +1203,7 @@ controls:
           - nist-csf-pr.pt
           - nist-csf-pr.pt-5
       - google cloud
-  - id: darkbit-gcp-53
+  - id: rule-gcp-53
     title: GKE Node Pools Should Enable AutoUpgrade
     description:
       The GKE service will automatically maintain the version and patch release
@@ -1221,7 +1251,7 @@ controls:
           - nist-csf-pr.pt
           - nist-csf-pr.pt-5
       - google cloud
-  - id: darkbit-gcp-55
+  - id: rule-gcp-55
     title: GKE Subnet Alias Ranges Should Be Configured
     description:
       In order to support private GKE Clusters, Alias IP ranges on the VPC
@@ -1271,7 +1301,7 @@ controls:
           - nist-csf-pr.pt-3
           - nist-csf-pr.pt-4
       - google cloud
-  - id: darkbit-gcp-56
+  - id: rule-gcp-56
     title: GKE Legacy ABAC Authorization Should Not Be Used
     description:
       Role-Based Access Control has been the default authorization mechanism
@@ -1320,7 +1350,7 @@ controls:
           - nist-csf-pr.ip
           - nist-csf-pr.ip-1
       - google cloud
-  - id: darkbit-gcp-59
+  - id: rule-gcp-59
     title: Cloud SQL Instance Automatic Backups With Point-in-Time Recovery Should Be Configured
     description:
       By default, Cloud SQL instances do not have automatic backups with point-in-time
@@ -1371,7 +1401,7 @@ controls:
           - nist-csf-pr.pt
           - nist-csf-pr.pt-5
       - google cloud
-  - id: darkbit-gcp-60
+  - id: rule-gcp-60
     title: Default Compute Service Account Should Not Be Bound To Project Editor
     description:
       By default, the Default Compute service account is enabled and bound to
@@ -1416,7 +1446,7 @@ controls:
           - nist-csf-pr.ac-1
           - nist-csf-pr.ac-4
       - google cloud
-  - id: darkbit-gcp-61
+  - id: rule-gcp-61
     title: Application-Level Encryption of Secrets in GKE Etcd Should Be Implemented
     description:
       The Kubernetes API Server has the ability to leverage an external KMS
@@ -1492,7 +1522,7 @@ controls:
           - nist-csf-pr.ds-1
           - nist-csf-pr.ds-5
       - google cloud
-  - id: darkbit-gcp-62
+  - id: rule-gcp-62
     title: GCP Service Accounts Should Not Have User-Managed Keys Attached
     description:
       Anyone who has access to the keys will be able to access resources through the service
@@ -1540,7 +1570,7 @@ controls:
           - gcp-cis1.1-1.4
       - nist-csf:
           - nist-csf-todo
-  - id: darkbit-gcp-63
+  - id: rule-gcp-63
     title: GCP Service Accounts Should Not Be Bound To Admin, Editor, or Owner Roles
     description: |
       In most use cases, GCP Service Accounts should be bound to predefined or custom roles 
@@ -1593,7 +1623,7 @@ controls:
           - gcp-cis1.1-1.5
       - nist-csf:
           - nist-csf-todo
-  - id: darkbit-gcp-64
+  - id: rule-gcp-64
     title: Service Account Admin and Service Account User Should Not Be Attached To The Same Identity
     description:
       As a best practice to ensure separation of duties, no user should have both `Service Account Admin`
@@ -1647,7 +1677,7 @@ controls:
           - hipaa-164.312(a)(2)(i)
           - hipaa-164.310(a)(1)
           - hipaa-164.308(a)(5)(ii)(D)
-  - id: darkbit-gcp-65
+  - id: rule-gcp-65
     title: Cloud KMS Keys Should Not Be Public
     description:
       Granting permissions to `allUsers` or `allAuthenticatedUsers` allows anyone to access KMS keys.
@@ -1722,7 +1752,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-66
+  - id: rule-gcp-66
     title: Cloud KMS Keys Should Be Rotated Every 90 Days
     description:
       Google Cloud KMS stores cryptographic keys in a hierarchical structure designed for
@@ -1771,7 +1801,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-67
+  - id: rule-gcp-67
     title: Cloud KMS Admin and Cloud KMS Encrypter/Decrypter Should Not Be Attached To The Same Identity
     description:
       The built-in/predefined IAM role `Cloud KMS Admin` allows the user/identity to create, delete,
@@ -1819,7 +1849,7 @@ controls:
           - hipaa-164.308(a)(5)(ii)(C)
           - hipaa-164.312(a)(check)
       - google cloud
-  - id: darkbit-gcp-72
+  - id: rule-gcp-72
     title: Log Sinks Should Be Configured For All Log Entries
     description: |
       For the best visbility into security events, at least one log sink should be configured with no 
@@ -1864,7 +1894,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-73
+  - id: rule-gcp-73
     title: Logging Buckets Should Have Retention Policies and Bucket Lock Enabled
     description: |
       Enabling retention policies on log buckets will protect logs stored in cloud 
@@ -1927,7 +1957,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-74
+  - id: rule-gcp-74
     title: Log Metric Filter And Alert Should Notify On Project Ownership Changes
     description: |
       In order to prevent unnecessary project ownership assignments to users/service-accounts 
@@ -2005,7 +2035,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-75
+  - id: rule-gcp-75
     title: Log Metric Filter And Alert Should Notify On Audit Configuration Changes
     description: |
       Admin activity and data access logs produced by cloud audit logging enable security 
@@ -2080,7 +2110,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-76
+  - id: rule-gcp-76
     title: Log Metric Filter And Alert Should Notify On Firewall Rule Changes
     description: |
       A metric filter and alert should exist for VPC network firewall rule changes.
@@ -2151,7 +2181,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-77
+  - id: rule-gcp-77
     title: Log Metric Filter And Alert Should Notify On Route Changes
     description: |
       A metric filter and alert should exist for VPC network route changes. Monitoring changes 
@@ -2223,7 +2253,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-78
+  - id: rule-gcp-78
     title: Log Metric Filter And Alert Should Notify On Network Changes
     description: |
       A metric filter and alarm should exist for VPC network changes. Monitoring changes 
@@ -2305,7 +2335,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-79
+  - id: rule-gcp-79
     title: Log Metric Filter And Alert Should Notify On Cloud Storage IAM Changes
     description: |
       A metric filter and alarm should exist for Cloud Storage Bucket IAM changes. Monitoring changes to 
@@ -2377,7 +2407,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-80
+  - id: rule-gcp-80
     title: Log Metric Filter And Alert Should Notify On SQL Instance Changes
     description: |
       A metric filter and alarm should exist for SQL instance configuration changes. Monitoring changes to 
@@ -2446,7 +2476,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: darkbit-gcp-81
+  - id: rule-gcp-81
     title: Legacy VPC Networks Should Not Be Present
     description: |
       There are several disadvantages to using legacy networks. Legacy networks have a single network 
@@ -2487,7 +2517,7 @@ controls:
       - hipaa:
           - hipaa-164.(check-net)
       - google cloud
-  - id: darkbit-gcp-82
+  - id: rule-gcp-82
     title: Cloud DNS Domains Should Have DNSSEC Enabled
     description: |
       Cloud DNS domains should have Domain Name System Security Extensions (DNSSEC) enabled. DNSSEC in 
@@ -2532,7 +2562,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-83
+  - id: rule-gcp-83
     title: Cloud DNS Domains Should Not Use RSASHA1 For The Key Signing Key
     description: |
       Legacy insecure key signing algorithms should not be used for Cloud DNS Domains.
@@ -2581,7 +2611,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-84
+  - id: rule-gcp-84
     title: Cloud DNS Domains Should Not Use RSASHA1 For The Zone Signing Key
     description: |
       Legacy insecure key signing algorithms should not be used for Cloud DNS Domains.
@@ -2630,7 +2660,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-85
+  - id: rule-gcp-85
     title: GCE Instances Should Not Have The Default Compute Service Account Attached
     description: |
       GCE instances should not use the default Compute Engine service account because it has the Editor role on the Project.
@@ -2690,7 +2720,7 @@ controls:
       - hipaa:
           - hipaa-164.(check-net)
       - google cloud
-  - id: darkbit-gcp-86
+  - id: rule-gcp-86
     title: GCE Instances Should Not Have The "cloud-platform" OAuth2 Scope Assigned
     description: |
       The principle of least privilege should be implemented to help prevent potential privilege escalation. Instances 
@@ -2751,7 +2781,7 @@ controls:
       - hipaa:
           - hipaa-164.(check-net)
       - google cloud
-  - id: darkbit-gcp-87
+  - id: rule-gcp-87
     title: GCE Instances Should Block Project-Wide SSH Keys
     description: |
       Use instance-specific SSH keys instead of using common/shared project-wide SSH keys to access instances.
@@ -2798,7 +2828,7 @@ controls:
       - hipaa:
           - hipaa-164.(check-net)
       - google cloud
-  - id: darkbit-gcp-88
+  - id: rule-gcp-88
     title: OSLogin Should Be Enabled In Compute Projects And GCE Instances Should Not Override Via Metadata
     description: |
       Enabling `osLogin` ensures that SSH keys used to connect to instances are mapped with IAM users. Revoking 
@@ -2855,7 +2885,7 @@ controls:
       - hipaa:
           - hipaa-164.(check-net)
       - google cloud
-  - id: darkbit-gcp-89
+  - id: rule-gcp-89
     title: GCE Instances Should Not Be Available Via Serial Console
     description: |
       Tnteractive serial console support should be disabled. The interactive serial console does not support 
@@ -2900,7 +2930,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-90
+  - id: rule-gcp-90
     title: GCE Instances Should Not Have IP Forwarding Enabled
     description: |
       Instances not involved in routing network traffic should have IP forwarding disabled.
@@ -2937,7 +2967,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-91
+  - id: rule-gcp-91
     title: Business Critical GCE Instances Should Have CSEK Encrypted Disks
     description: |
       If you provide your Customer-Supplied Encryption Key (CSEK), Compute Engine uses your key to protect the 
@@ -2987,7 +3017,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-92
+  - id: rule-gcp-92
     title: GCE Instances Should Be Shielded Nodes
     description: |
       Launch compute instances Shielded VM enabled to defend against against advanced threats 
@@ -3057,7 +3087,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-94
+  - id: rule-gcp-94
     title: GCS Buckets Should Not Be Public
     description: |
       Cloud Storage bucket should not allow anonymous or public access.
@@ -3101,7 +3131,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-95
+  - id: rule-gcp-95
     title: GCS Buckets Should Have Uniform IAM Access Configured
     description: |
       Cloud Storage has uniform bucket-level access. Using this feature disables ACLs for all Cloud 
@@ -3149,7 +3179,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-97
+  - id: rule-gcp-97
     title: Cloud SQL Instances Running MySQL Should Have "local_infile" Disabled
     description: |
       Diabling `local_infile` controls the server-side `LOCAL` capability for `LOAD DATA`
@@ -3198,7 +3228,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-98
+  - id: rule-gcp-98
     title: Cloud SQL Instances Running PostgreSQL Should Have "log_checkpoints" Enabled
     description: |
       Enabling `log_checkpoints` causes checkpoints and restart points to be logged in the server log. 
@@ -3247,7 +3277,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-99
+  - id: rule-gcp-99
     title: Cloud SQL Instances Running PostgreSQL Should Have "log_connections" Enabled
     description: |
       The `log_connections` setting should be enabled. PostgreSQL does not log attempted connections by 
@@ -3299,7 +3329,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-100
+  - id: rule-gcp-100
     title: Cloud SQL Instances Running PostgreSQL Should Have "log_disconnections" Enabled
     description: |
       The `log_connections` setting should be enabled. PostgreSQL does not log session details such as 
@@ -3350,7 +3380,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-101
+  - id: rule-gcp-101
     title: Cloud SQL Instances Running PostgreSQL Should Have "log_lock_waits" Enabled
     description: |
       The `log_lock_waits` setting should be enabled. The deadlock timeout defines the time to wait 
@@ -3401,7 +3431,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-102
+  - id: rule-gcp-102
     title: Cloud SQL Instances Running PostgreSQL Should Have "log_min_error_statement" Set To "ERROR"
     description: |
       The `log_min_error_statement` setting should be enabled to aid troubleshooting and forensic analysis. The
@@ -3450,7 +3480,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-103
+  - id: rule-gcp-103
     title: Cloud SQL Instances Running PostgreSQL Should Have "log_temp_files" Enabled
     description: |
       PostgreSQL instances should have `log_temp_files` enabled to aid in troubleshooting. PostgreSQL will create a 
@@ -3502,7 +3532,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-104
+  - id: rule-gcp-104
     title: Cloud SQL Instances Running PostgreSQL Should Have "log_min_duration_statement" Disabled
     description: |
       SQL statements may include sensitive information that should not be recorded in logs. The `log_min_duration_statement` 
@@ -3551,7 +3581,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-105
+  - id: rule-gcp-105
     title: Cloud SQL Instances Running SQL Server Should Have "cross db ownership chaining" Disabled
     description: |
       The database flag `set cross db ownership chaining` should be disabled for SQL Server instances. This server 
@@ -3601,7 +3631,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-106
+  - id: rule-gcp-106
     title: Cloud SQL Instances Running SQL Server Should Have "contained database authentication" Disabled
     description: |
       The database flag `contained database authentication` should be disabled for SQL Server instances. A **contained** 
@@ -3657,7 +3687,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-107
+  - id: rule-gcp-107
     title: Cloud SQL Instances Should Have Restrictive Authorized Networks Configured
     description: |
       Cloud SQL instances should only accept connections from trusted networks or IP addresses and restrict 
@@ -3705,7 +3735,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-108
+  - id: rule-gcp-108
     title: BigQuery Datasets Should Not Be Public
     description: |
       BigQuery datasets should not allow anonymous or public access.
@@ -3748,7 +3778,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-109
+  - id: rule-gcp-109
     title: GKE Clusters Should Not Have Client Certificate Authentication Enabled
     description: |
       Disable client certificates, which require certificate rotation, for authentication. 
@@ -3794,7 +3824,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-110
+  - id: rule-gcp-110
     title: GCR Image Vulnerability Scanning Should Be Enabled
     description: |
       Vulnerabilities in software packages can be exploited by hackers or malicious users to 
@@ -3834,7 +3864,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-111
+  - id: rule-gcp-111
     title: GCR Push Access Should Be Minimized
     description: |
       Google Container Registries are commonly the central storage point for all internal container images in an organization, and these container images are run in multiple situations with direct access to sensitive data and credentials.  Therefore, the ability to "push" or upload images is a privileged operation that should be restricted to a small number of identities to maintain the integrity of the software supply chain.  Permissions for accessing GCR registries are handled directly by the permissions assigned to the Google Storage Bucket.
@@ -3879,7 +3909,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-112
+  - id: rule-gcp-112
     title: GKE Clusters Should Have Read-Only Permissions to GCR Registries
     description: |
       The Cluster Service Account should have read-only access to GCR. The Cluster Service Account does 
@@ -3945,7 +3975,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-113
+  - id: rule-gcp-113
     title: GKE Clusters Nodes Should Disable Legacy Metadata API Access
     description: |
       Legacy GCE instance metadata APIs for should be disabled for GKE nodes to prevent a pod workload from 
@@ -3991,7 +4021,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-114
+  - id: rule-gcp-114
     title: GKE Clusters Should Use Stable Or Regular Release Channels
     description: |
       Clusters should be subscribed to the Regular or Stable Release Channel to 
@@ -4039,7 +4069,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-115
+  - id: rule-gcp-115
     title: GKE Cluster Nodes Should Not Have Public IP Addresses
     description: |
       Disable public IP addresses for cluster nodes, so that they only have private 
@@ -4083,7 +4113,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-116
+  - id: rule-gcp-116
     title: GKE Worker Nodes Should Have Restrictive Ingress and Egress Firewall Rules
     description: |
       GKE Worker Nodes should not provisioned with public IP addresses in projects 
@@ -4145,7 +4175,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-117
+  - id: rule-gcp-117
     title: HTTPS Load Balancers Should Use Google-Managed SSL Certificates
     description: |
       Traffic to HTTPS load balancers should be encrypted using Google-managed SSL 
@@ -4198,7 +4228,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-121
+  - id: rule-gcp-121
     title: GKE Clusters Should Support Google Groups In RBAC Bindings
     description: |
       Leverage Google Groups and Cloud IAM to assign Kubernetes user roles to a 
@@ -4239,7 +4269,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-122
+  - id: rule-gcp-122
     title: GKE Cluster Node Boot And Persistent Disks Should Be Encrypted With Customer Managed Encryption Keys (CMEK)
     description: |
       GCE persistent disks are encrypted at rest by default using envelope 
@@ -4316,7 +4346,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-123
+  - id: rule-gcp-123
     title: Alpha GKE Clusters Should Not Be Used In Production
     description: |
       Alpha clusters should not be used in production as they are not covered 
@@ -4357,7 +4387,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-124
+  - id: rule-gcp-124
     title: GKE Sandbox (gVisor) Should Be Enabled For Untrusted Workloads
     description: |
       GKE Sandbox should be used to restrict untrusted workloads as an additional 
@@ -4403,7 +4433,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-125
+  - id: rule-gcp-125
     title: GKE Clusters Should Enable Binary Authorization
     description: |
       Binary Authorization should be used to help enforce supply-chain security by 
@@ -4454,7 +4484,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-127
+  - id: rule-gcp-127
     title: GKE Clusters Should Not Have Basic Authentication Enabled
     description: |
       Disable Basic Authentication (basic auth) for API server authentication as 
@@ -4497,7 +4527,7 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - google cloud
-  - id: darkbit-gcp-128
+  - id: rule-gcp-128
     title: Log Metric Filter And Alert Should Notify On Custom Role Changes
     description: |
       A metric filter and alert should exist for changes to Identity and Access 
@@ -4575,7 +4605,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: new-gcp-2
+  - id: rule-gcp-129
     title: GCS Buckets Should have Uniform Access enabled
     description:
       Ensure that Cloud Storage buckets have uniform bucket-level access
@@ -4623,7 +4653,7 @@ controls:
           - hipaa-164.308(a)(3)(i)
           - hipaa-164.312(a)(1)
       - google cloud
-  - id: new-gcp-3
+  - id: rule-gcp-130
     title: GCS Buckets Should Not Be Exposed to the Public
     description:
       Allowing anonymous or public access to a Cloud Storage bucket grants permissions to anyone to access the bucket's content. If you are storing sensitive data in the bucket anonymous and public access may not be desired.
@@ -4662,7 +4692,7 @@ controls:
           - hipaa-164.308(a)(3)(i)
           - hipaa-164.312(a)(1)
       - google cloud
-  - id: new-gcp-4
+  - id: rule-gcp-131
     title: Default Compute Service Account Should Not Be Bound To Project Editor
     description:
       By default, the Default Compute service account is enabled and bound to
@@ -4710,7 +4740,7 @@ controls:
           - hipaa-164.312(a)
           - hipaa-164.312(a)(1)
       - google cloud
-  - id: new-gcp-5
+  - id: rule-gcp-132
     title: GCE Instances Should Not Have Public IP Addresses
     description:
       GCE Instances should not have public IP addresses assigned directly
@@ -4761,7 +4791,7 @@ controls:
           - hipaa-164.312(a)
           - hipaa-164.312(a)(1)
       - google cloud
-  - id: new-gcp-6
+  - id: rule-gcp-133
     title: User-Managed GCP Service Account Keys Should Be Rotated Every 90 days Or Less
     description:
       GCP Service Account Keys that are created by an administrator are known
@@ -4823,7 +4853,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.308(a)(5)(ii)(A)
       - google cloud
-  - id: new-gcp-7
+  - id: rule-gcp-134
     title: GCP Projects Should Enable Data Access Logging
     description:
       GCP Audit logs automatically capture administrative activity logs for
@@ -4899,7 +4929,7 @@ controls:
           - hipaa-164.312(a)(1)
           - hipaa-164.312(a)(2)(iii)
       - google cloud
-  - id: new-gcp-8
+  - id: rule-gcp-135
     title: GCP Service Accounts Should Not Have User-Managed Keys Attached
     description:
       Anyone who has access to the keys will be able to access resources through the service
@@ -4952,7 +4982,7 @@ controls:
           - hipaa-164.310(a)(1)
           - hipaa-164.308(a)(5)(ii)(D)
       - google cloud
-  - id: new-gcp-9
+  - id: rule-gcp-136
     title: Firewall Rules Should Not Allow Access to HTTP/80 From All Hosts
     description:
       Firewall rules that permit inbound/ingress access from any IP address
@@ -5005,7 +5035,7 @@ controls:
           - hipaa-164.308(e)
             - hipaa-164.308(e)(2)(i)
       - google cloud
-  - id: new-gcp-10
+  - id: rule-gcp-137
     title: Firewall Rules Should Not Allow Access to Telnet TCP/23 From All Hosts
     description:
       Firewall rules that permit inbound/ingress access from any IP address
@@ -5058,7 +5088,7 @@ controls:
           - hipaa-164.308(e)
           - hipaa-164.308(e)(2)(i)
       - google cloud
-  - id: new-gcp-11
+  - id: rule-gcp-138
     title: Firewall Rules Should Not Allow Access to POP3 TCP/110 From All Hosts
     description:
       Firewall rules that permit inbound/ingress access from any IP address
@@ -5111,7 +5141,7 @@ controls:
           - hipaa-164.308(e)
           - hipaa-164.308(e)(2)(i)
       - google cloud
-  - id: new-gcp-12
+  - id: rule-gcp-139
     title: GCP Firewall Rule Allows All Traffic On MySQL DB Port (3306)
     description:
       Firewall rules that permit inbound/ingress access from any IP address
@@ -5164,7 +5194,7 @@ controls:
           - hipaa-164.308(e)
           - hipaa-164.308(e)(2)(i)
       - google cloud
-  - id: new-gcp-13
+  - id: rule-gcp-140
     title: GCP Test Healcare API Show Datasets
     description:
       Check the module
@@ -5202,7 +5232,7 @@ controls:
           - hipaa-164.308(e)
           - hipaa-164.308(e)(2)(i)
       - google cloud
-  - id: new-gcp-14
+  - id: rule-gcp-141
     title: Ensure that VPC Flow Logs is enabled for every subnet in a VPC Network
     description:
       Flow Logs is a feature that enables users to capture information about the IP traffic going to
@@ -5275,7 +5305,7 @@ controls:
       - hipaa:
           - hipa-164(check)
       - google cloud
-  - id: new-gcp-15
+  - id: rule-gcp-142
     title: Ensure That All BigQuery Tables Are Encrypted With Customer-Managed Encryption Key (CMEK)
     description: |
       BigQuery by default encrypts the data as rest by employing Envelope Encryption using
@@ -5324,7 +5354,7 @@ controls:
       - hipaa:
           - hipaa-164.check
       - google cloud
-  - id: new-gcp-16
+  - id: rule-gcp-143
     title: Ensure That All BigQuery Tables Are Encrypted With Customer-Managed Encryption Key (CMEK)
     description: |
       BigQuery by default encrypts the data as rest by employing Envelope Encryption using
@@ -5373,7 +5403,7 @@ controls:
       - hipaa:
           - hipaa-164.check
       - google cloud
-  - id: new-gcp-17
+  - id: rule-gcp-144
     title: HealthCare API Should Be Enabled
     description: |
       Vulnerabilities in software packages can be exploited by hackers or malicious users to
