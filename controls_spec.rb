@@ -2336,54 +2336,13 @@ control_id = 'rule-gcp-129'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   q = %s(
     MATCH (b:GCP_STORAGE_BUCKET)
-    RETURN b.name AS name, b.resource_data_iamConfiguration_uniformbucketlevelaccess_enabled AS is_uniformbucket
+    RETURN b.name AS name, b.resource_data_iamConfiguration_bucketPolicyOnly_enabled AS is_bucket
   )
   buckets = graphdb.query(q).mapped_results
   buckets.each do |bucket|
     describe bucket.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
       it 'should have uniform bucket-level access enabled' do
-        expect(bucket.is_uniformbucket).to eq('true')
-      end
-    end
-  end
-end
-
-control_id = 'rule-gcp-130'
-RSpec.describe "[#{control_id}] #{titles[control_id]}" do
-  q = %s(
-    MATCH (gi:GCP_IDENTITY { name: "allUsers" })
-    OPTIONAL MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)<-[ir1:HAS_IAMROLE]-(gi)
-    OPTIONAL MATCH (bucket:GCP_STORAGE_BUCKET)<-[ir2:HAS_IAMROLE]-(gi)
-    RETURN project.name as project_name, project.resource_data_name as display_name, bucket.name as bucket_name, ir1.role_name as project_role, ir2.role_name as bucket_role
-    UNION
-    MATCH (gi:GCP_IDENTITY { name: "allAuthenticatedUsers" })
-    OPTIONAL MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)<-[ir1:HAS_IAMROLE]-(gi)
-    OPTIONAL MATCH (bucket:GCP_STORAGE_BUCKET)<-[ir2:HAS_IAMROLE]-(gi)
-    RETURN project.name as project_name, project.resource_data_name as display_name, bucket.name as bucket_name, ir1.role_name as project_role, ir2.role_name as bucket_role
-  )
-  identities = graphdb.query(q).mapped_results
-  if identities.length > 0
-    identities.each do |identity|
-      if identity.project_name.nil? && identity.project_role.nil? && identity.bucket_name.nil? && identity.bucket_role.nil?
-        describe 'No affected resources found', control_pack: control_pack, control_id: control_id,
-                                                "#{control_id}": true do
-          it 'should not have all(Authenticated)Users access to projects or buckets' do
-            expect(true).to eq(true)
-          end
-        end
-      else
-        resource_name = "#{identity.bucket_name}: #{identity.bucket_role}" || identity.key_name
-        describe resource_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
-          it 'should not have all(Authenticated)Users access to projects or buckets' do
-            expect(resource_name).to be_nil
-          end
-        end
-      end
-    end
-  else
-    describe 'No affected resources found', control_pack: control_pack, control_id: control_id, "#{control_id}": true do
-      it 'should not have all(Authenticated)Users access to projects or buckets' do
-        expect(true).to eq(true)
+        expect(bucket.is_bucket).to eq('true')
       end
     end
   end
@@ -2636,9 +2595,7 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
     MATCH (h:GCP_HEALTHCARE_DATASET)<-[:HAS_RESOURCE]-(project:GCP_CLOUDRESOURCEMANAGER_PROJECT)
     RETURN project.name as project_name, project.resource_data_name as display_name, h.name as name
   )
-  pp graphdb.query(q)
   datasets = graphdb.query(q).mapped_results
-  pp datasets
   if datasets.length > 0
     datasets.each do |dataset|
     pp dataset
@@ -2716,7 +2673,6 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   projects = graphdb.query(q).mapped_results
   if projects.length > 0
     projects.each do |project|
-      pp project
       describe "#{project.project_name}[#{project.display_name}]", control_pack: control_pack, control_id: control_id,
                                                                    "#{control_id}": true do
         it 'should have container vulnerability scanning enabled' do
@@ -2728,6 +2684,507 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
     describe 'No affected resources found', control_pack: control_pack, control_id: control_id, "#{control_id}": true do
       it 'should have container vulnerability scanning enabled' do
         expect(true).to eq(true)
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-145'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (v:GCP_COMPUTE_NETWORK)
+    WHERE NOT v.resource_data_name IS NULL
+    RETURN v.name as vpc_name, v.resource_data_autoCreateSubnetworks as custom_mode
+  )
+  vpcs = graphdb.query(q).mapped_results
+  if vpcs.length > 0
+    vpcs.each do |vpc|
+      describe vpc.vpc_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+        it 'should not be a custom mode in VPC' do
+          expect(vpc.custom_mode).not_to eq('true')
+        end
+      end
+    end
+  else
+    describe 'No affected resources found', control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'should not be a custom mode VPC enabled' do
+        expect(true).to eq(true)
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-146'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (t:GCP_COMPUTE_NETWORKTAG)<-[:HAS_TARGETNETWORKTAG]-(f:GCP_COMPUTE_FIREWALL)
+    RETURN f.name as firewall_name, t.name as tags
+  )
+  fws = graphdb.query(q).mapped_results
+  if fws.length > 0
+    fws.each do |fw|
+      describe fw.firewall_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+        it 'should not use some tags' do
+          expect(fw.tags).not_to be_nil
+        end
+      end
+    end
+  else
+    describe 'No affected resources found', control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'should use some tags' do
+        expect(true).to eq(true)
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-147'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (sql:GCP_SQLADMIN_INSTANCE)
+    RETURN sql.name as instance_name, sql.resource_data_ipConfiguration_ipv4Enabled as private_ip
+  )
+  instances = graphdb.query(q).mapped_results
+  if instances.length > 0
+    instances.each do |instance|
+      describe instance.instance_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+        it 'should not have public IPs' do
+          expect(instance.private_ip).to be_nil
+        end
+      end
+    end
+  else
+    describe 'No affected resources found', control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'should not have public IPs' do
+        expect(true).to eq(true)
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-148'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (sql:GCP_SQLADMIN_INSTANCE)
+    RETURN sql.name as instance_name, sql.resource_data_settings_userLabels as labels
+  )
+  instances = graphdb.query(q).mapped_results
+  if instances.length > 0
+    instances.each do |instance|
+      describe instance.instance_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+        it 'SQL should use labels' do
+          expect(instance.labels).not_to be_nil
+        end
+      end
+    end
+  else
+    describe 'No affected resources found', control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'SQL should use labels' do
+        expect(true).to eq(true)
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-149'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (sql:GCP_SQLADMIN_INSTANCE)
+    RETURN sql.name as instance_name, sql.resource_data_settings_storageAutoResize as auto_size
+  )
+  instances = graphdb.query(q).mapped_results
+  pp instances
+  if instances.length > 0
+    instances.each do |instance|
+      describe instance.instance_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+        it 'SQL should use storage autoresize' do
+          expect(instance.auto_size).not_to eq('false')
+        end
+      end
+    end
+  else
+    describe 'No affected resources found', control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'SQL should use storage autoresize' do
+        expect(true).to eq(true)
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-150'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (sql:GCP_SQLADMIN_INSTANCE)
+    RETURN sql.name as instance_name, sql.resource_data_settings_backupConfiguration_enabled as backup
+  )
+  instances = graphdb.query(q).mapped_results
+  pp instances
+  if instances.length > 0
+    instances.each do |instance|
+      describe instance.instance_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+        it 'SQL should have enable backup' do
+          expect(instance.backup).not_to eq('false')
+        end
+      end
+    end
+  else
+    describe 'No affected resources found', control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'SQL should have enable backup' do
+        expect(true).to eq(true)
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-151'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_STORAGE_BUCKET)
+    RETURN b.name AS name, b.resource_data_labels AS is_label
+  )
+  buckets = graphdb.query(q).mapped_results
+  buckets.each do |bucket|
+    describe bucket.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'should have label provided' do
+        expect(bucket.is_label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-152'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_STORAGE_BUCKET)
+    RETURN b.name AS name, b.resource_data_versioning_enabled AS is_versioning
+  )
+  buckets = graphdb.query(q).mapped_results
+  buckets.each do |bucket|
+    describe bucket.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'should have versioning enabled' do
+        expect(bucket.is_versioning).to eq('true')
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-153'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_STORAGE_BUCKET)
+    RETURN b.name AS name, b.resource_data_location AS location
+  )
+  buckets = graphdb.query(q).mapped_results
+  buckets.each do |bucket|
+  pp bucket
+  buck_lock = [bucket.name, bucket.location].join('-')
+    describe buck_lock, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'should located in US' do
+        expect(bucket.location).to eq('US')
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-154'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_STORAGE_BUCKET)
+    RETURN b.name AS name, b.resource_data_lifecycle AS is_lifecycle
+  )
+  buckets = graphdb.query(q).mapped_results
+  buckets.each do |bucket|
+    describe bucket.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'Buckets should have lifecycle enabled' do
+        expect(bucket.is_lifecycle).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-155'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_STORAGE_BUCKET)
+    RETURN b.name AS name, b.resource_data_logging AS log
+  )
+  buckets = graphdb.query(q).mapped_results
+  buckets.each do |bucket|
+    describe bucket.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'Backets should have logging enabled' do
+        expect(bucket.log).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-156'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (pub:GCP_PUBSUB_TOPIC)
+    RETURN pub.name AS name, pub.resource_data_labels AS labels
+  )
+  topics = graphdb.query(q).mapped_results
+  topics.each do |topic|
+    describe topic.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'PubSub should have labelb enabled' do
+        expect(topic.labels).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-157'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (pub:GCP_PUBSUB_TOPIC)
+    RETURN pub.name AS name, pub.resource_data_kmsKeyName AS key
+  )
+  topics = graphdb.query(q).mapped_results
+  topics.each do |topic|
+    describe topic.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'PubSub can have kmsKeyName enabled' do
+        expect(topic.key).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-158'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (sub:GCP_PUBSUB_SUBSCRIPTION)
+    RETURN sub.name AS name, sub.resource_data_deadLetterPolicy AS policy
+  )
+  subscriptions = graphdb.query(q).mapped_results
+  subscriptions.each do |subscription|
+    describe subscription.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'PubSub can have _deadLetterPolicy enabled' do
+        expect(subscription.policy).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-159'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (sub:GCP_PUBSUB_SUBSCRIPTION)
+    RETURN sub.name AS name, sub.resource_data_labels AS label
+  )
+  subscriptions = graphdb.query(q).mapped_results
+  subscriptions.each do |subscription|
+    describe subscription.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'PubSub have labels' do
+        expect(subscription.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-160'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (pub:GCP_PUBSUB_SNAPSHOT)
+    RETURN pub.name AS name, pub.resource_data_labels AS labels
+  )
+  snapshots = graphdb.query(q).mapped_results
+  snapshots.each do |snapshot|
+    describe snapshot.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'PubSub snapshot should have labelb enabled' do
+        expect(snapshot.labels).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-161'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_BIGQUERY_DATASET)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  datasets = graphdb.query(q).mapped_results
+  datasets.each do |dataset|
+    describe dataset.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'Bigquery dataset have labels' do
+        expect(dataset.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-162'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_BIGQUERY_TABLE)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  tables = graphdb.query(q).mapped_results
+  tables.each do |table|
+    describe table.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'Bigquery table have labels' do
+        expect(table.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-163'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_BIGQUERY_MODEL)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  models = graphdb.query(q).mapped_results
+  models.each do |model|
+    describe model.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'Bigquery model have labels' do
+        expect(model.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-164'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_BIGTABLEADMIN_INSTANCE)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  bigtables = graphdb.query(q).mapped_results
+  bigtables.each do |bigtable|
+    describe bigtable.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'Bigtable instances have labels' do
+        expect(bigtable.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-165'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_DATAFLOW_JOB)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  dataflows = graphdb.query(q).mapped_results
+  dataflows.each do |dataflow|
+    describe dataflow.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'dataflow jobs have labels' do
+        expect(dataflow.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-166'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_DATAPROC_JOB)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  dataprocs = graphdb.query(q).mapped_results
+  dataprocs.each do |dataproc|
+    describe dataproc.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'dataproc jobs have labels' do
+        expect(dataproc.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-167'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_DATAPROC_CLUSTER)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  dataprocs = graphdb.query(q).mapped_results
+  dataprocs.each do |dataproc|
+    describe dataproc.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'dataproc clusters have labels' do
+        expect(dataproc.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-168'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_CLOUDKMS_CRYPTOKEY)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  kms = graphdb.query(q).mapped_results
+  kms.each do |key|
+    describe key.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'KMS key has labels' do
+        expect(key.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-169'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_CLOUDFUNCTIONS_CLOUDFUNCTION)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  functions = graphdb.query(q).mapped_results
+  functions.each do |function|
+    describe function.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'CloudFunction has labels' do
+        expect(function.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-170'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_SPANNER_INSTANCE)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  dbs = graphdb.query(q).mapped_results
+  dbs.each do |db|
+    describe db.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'Cloud Spanner has labels' do
+        expect(db.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-171'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (b:GCP_COMPUTE_INSTANCE)
+    RETURN b.name AS name, b.resource_data_labels AS label
+  )
+  instances = graphdb.query(q).mapped_results
+  instances.each do |instance|
+    describe instance.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'Compute Engine Instance has labels' do
+        expect(instance.label).not_to be_nil
+      end
+    end
+  end
+end
+
+control_id = 'rule-gcp-172'
+RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+  q = %s(
+    MATCH (i:GCP_CONTAINER_CLUSTER)
+    RETURN i.name AS name, i.resource_data_resourceLabels AS label
+  )
+  instances = graphdb.query(q).mapped_results
+  instances.each do |instance|
+    describe instance.name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+      it 'GKE Instance has labels' do
+        expect(instance.label).not_to be_nil
       end
     end
   end

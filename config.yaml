@@ -1,5 +1,5 @@
 id: 'opencspm-darkbit-community-controls'
-title: 'Darkbit Community Controls'
+title: 'SoftServe Controls'
 description: 'This checks the majority of the AWS 1.3.0 and GCP CIS 1.1 Benchmark controls'
 controls:
   #GCP
@@ -4606,23 +4606,23 @@ controls:
           - hipaa-164.312(a)(2)(iii)
       - google cloud
   - id: rule-gcp-129
-    title: GCS Buckets Should have Uniform Access enabled
+    title: GCS Buckets Should have Bucket Policy Only enabled
     description:
-      Ensure that Cloud Storage buckets have uniform bucket-level access
+      Ensure that Cloud Storage buckets have bucketPolicyOnly access
       enabled
     remediation: |-
-      It is recommended to use uniform bucket-level access to unify and simplify how you grant
+      It is recommended to usebucketPolicyOnly access to unify and simplify how you grant
       access to your Cloud Storage resources.
     validation: |-
-      For each bucket, verify that uniform bucket-level access is enabled..
+      For each bucket, verify that bucketPolicyOnly bucket-level access is enabled..
 
       ```
-      gsutil uniformbucketlevelaccess get gs://BUCKET_NAME/
+      gsutil bucketpolicyonly get gs://BUCKET_NAME/
       ```
-      Use the on option in a uniformbucketlevelaccess set command:
+      Use the on option in a bucketpolicyonly set command:
 
       ```
-      gsutil uniformbucketlevelaccess set on gs://BUCKET_NAME/
+      gsutil bucketpolicyonly set on gs://BUCKET_NAME/
       ```
     impact: 9
     effort: 2
@@ -4632,7 +4632,7 @@ controls:
     nodes:
       - GCP_STORAGE_BUCKET
     refs:
-      - text: Bucket Uniform Level Access
+      - text: Bucket PolicyOnly Access
         url: https://cloud.google.com/storage/docs/uniform-bucket-level-access
       - text: Bucket Uniform Level Access
         url: https://cloud.google.com/storage/docs/setting-org-policies#uniform-bucket
@@ -5440,6 +5440,1273 @@ controls:
           - gke-cis1.1-5
           - gke-cis1.1-5.1
           - gke-cis1.1-5.1.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-145
+    title: Use Custom Mode VPC Networks
+    description:
+      Custom mode VPC networks better integrate into existing IP address management schemes.
+      Because all auto mode networks use the same set of internal IP ranges, auto mode IP
+      ranges might overlap when connected with your on-premises corporate networks.
+    remediation:
+      You can't connect two auto mode VPC networks together using VPC Network Peering because
+      their subnets use identical primary IP ranges.
+      You can choose unique, descriptive names for custom mode subnets, making your VPC
+      networks more understandable and maintainable.
+      When a new region is introduced, GCP automatically creates a new subnet in an auto
+      mode network. Custom mode VPC networks provide more flexibility for planning and
+      avoiding overlapping addresses.
+    validation: |-
+      In each project, run the following command and ensure no entries are listed.
+
+      ```
+      for i in `gcloud compute networks list  --project= | awk '(NR>1) {print $1}'` \
+      do gcloud compute networks list  --project=prisma-demo-p $i \
+      --format=json  --filter="autoCreateSubnetworks=('true')"; done
+      ```
+    impact: 3
+    effort: 8
+    platform: GCP
+    category: Networking and Content Delivery
+    resource: VPC
+    nodes:
+      - PLACEHOLDER
+    refs:
+      - text: Default VPC Network
+        url: https://cloud.google.com/vpc/docs/vpc#default-network
+      - text: Auto mode IP ranges
+        url: https://cloud.google.com/vpc/docs/vpc#ip-ranges
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level2
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-3
+          - gcp-cis1.1-3.1
+      - nist-csf:
+          - nist-csf-id
+          - nist-csf-id.am
+          - nist-csf-id.am-3
+          - nist-csf-pr
+          - nist-csf-pr.ac
+          - nist-csf-pr.ac-5
+          - nist-csf-pr.ds
+          - nist-csf-pr.ds-7
+          - nist-csf-pr.pt
+          - nist-csf-pr.pt-4
+      - hipaa:
+          - hipaa-164.308(a)(5)(ii)(A)
+      - google cloud
+  - id: rule-gcp-146
+    title: Use Service Accounts Or Network Tags to Apply Specific Routing Policies or Firewall Rules
+    description:
+      Firewall rules that permit inbound/ingress access from any IP address
+      (0.0.0.0/0) to administrative ports via SSH (tcp/22) should be reviewed for necessity
+      to prevent unintended exposure of services and systems protected by that security
+      group.  The primary exclusion to this is a dedicated, hardened bastion host.
+    remediation:
+      For each firewall rule, assess whether the attached systems requires
+      SSH access from any IP address.  If not, consider reducing the source IP
+      ranges to a specific set of subnets or to the bastion host(s) in the environment.
+    validation: |-
+      In each project, run the following command and ensure no entries that
+      permit present sourceTags targetTags sourceServiceAccounts targetServiceAccounts
+
+      ```
+      gcloud compute firewall-rules list \
+        --format=json | jq -r '.[] |
+          select(.sourceRanges) |
+          select(.allowed) |
+          select(.sourceRanges[] |
+          contains("0.0.0.0/0")) | "\(.name) \(.allowed[])"'
+      ```
+    impact: 8
+    effort: 4
+    platform: GCP
+    category: Network Access Control
+    resource: Firewall
+    nodes:
+      - GCP_COMPUTE_FIREWALL
+    refs:
+      - text: Configuring Firewall Rules
+        url: https://cloud.google.com/vpn/docs/how-to/configuring-firewall-rules
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level2
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-3
+          - gcp-cis1.1-3.6
+      - nist-csf:
+          - nist-csf-pr
+          - nist-csf-pr.ac
+          - nist-csf-pr.ac-3
+          - nist-csf-pr.ac-4
+          - nist-csf-pr.ac-5
+          - nist-csf-pr.ds
+          - nist-csf-pr.ds-5
+      - hipaa:
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-147
+    title: Cloud SQL Database Instances Do Not Have Public IPs
+    description: |
+      To lower the organization's attack surface, Cloud SQL databases should not have public IPs.
+      Private IPs provide improved network security and lower latency for your application.
+    remediation: |
+      List all Cloud SQL database instances using the following command:
+
+      ```
+      gcloud sql instances list
+      ```
+    validation: |-
+      For every instance of type instanceType: CLOUD_SQL_INSTANCE with backendType:
+      SECOND_GEN , get detailed configuration. Ignore instances of type
+      READ_REPLICA_INSTANCE because these instances inherit their settings from the
+      primary instance. Also, note that first generation instances cannot be configured to
+      have a private IP address.
+
+      ```
+      gcloud sql instances describe INSTANCE_NAME
+      ```
+
+      Ensure that the setting ipAddresses has an IP address configured of type: PRIVATE
+      and has no IP address of type: PRIMARY . PRIMARY email addresses are public
+      addresses. An instance can have both a private and public address at the same time.
+      Note also that you cannot use private IP with First Generation instances.
+
+    impact: 8
+    effort: 3
+    platform: GCP
+    category: Network Access Control
+    resource: Cloud SQL
+    nodes:
+      - GCP_SQLADMIN_INSTANCE
+    refs:
+      - text: Configuring private IP connectivity for MySQL
+        url: https://cloud.google.com/sql/docs/mysql/configure-private-ip
+      - text: Configuring public IP connectivity for MySQL
+        url: https://cloud.google.com/sql/docs/mysql/private-ip
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-6
+          - gcp-cis1.1-6.5
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hippa-sql
+      - google cloud
+  - id: rule-gcp-148
+    title: Cloud SQL Database Instances Do Not Have Labels
+    description: |
+      To lower the organization's attack surface, Cloud SQL databases should not have public IPs.
+      Private IPs provide improved network security and lower latency for your application.
+    remediation: |
+      List all Cloud SQL database instances using the following command:
+
+      ```
+      gcloud sql instances list
+      ```
+    validation: |-
+      For every instance of type instanceType: CLOUD_SQL_INSTANCE with backendType:
+      SECOND_GEN , get detailed configuration. Ignore instances of type
+      READ_REPLICA_INSTANCE because these instances inherit their settings from the
+      primary instance. Also, note that first generation instances cannot be configured to
+      have a private IP address.
+
+      ```
+      gcloud sql instances describe INSTANCE_NAME
+      ```
+
+      Ensure that the setting ipAddresses has an IP address configured of type: PRIVATE
+      and has no IP address of type: PRIMARY . PRIMARY email addresses are public
+      addresses. An instance can have both a private and public address at the same time.
+      Note also that you cannot use private IP with First Generation instances.
+
+    impact: 8
+    effort: 3
+    platform: GCP
+    category: Network Access Control
+    resource: Cloud SQL
+    nodes:
+      - GCP_SQLADMIN_INSTANCE
+    refs:
+      - text: Configuring private IP connectivity for MySQL
+        url: https://cloud.google.com/sql/docs/mysql/configure-private-ip
+      - text: Configuring public IP connectivity for MySQL
+        url: https://cloud.google.com/sql/docs/mysql/private-ip
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-6
+          - gcp-cis1.1-6.5
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hippa-sql
+      - google cloud
+  - id: rule-gcp-149
+    title: Cloud SQL Database Instances Storage auto resize
+    description: |
+      To lower the organization's attack surface, Cloud SQL databases should not have public IPs.
+      Private IPs provide improved network security and lower latency for your application.
+    remediation: |
+      List all Cloud SQL database instances using the following command:
+
+      ```
+      gcloud sql instances list
+      ```
+    validation: |-
+      For every instance of type instanceType: CLOUD_SQL_INSTANCE with backendType:
+      DESCRIBE
+
+      ```
+      gcloud sql instances describe INSTANCE_NAME
+      ```
+
+      Ensure that the setting ipAddresses has an IP address configured of type: PRIVATE
+      and has no IP address of type: PRIMARY . PRIMARY email addresses are public
+      addresses. An instance can have both a private and public address at the same time.
+      Note also that you cannot use private IP with First Generation instances.
+
+    impact: 8
+    effort: 3
+    platform: GCP
+    category: Network Access Control
+    resource: Cloud SQL
+    nodes:
+      - GCP_SQLADMIN_INSTANCE
+    refs:
+      - text: Configuring private IP connectivity for MySQL
+        url: https://cloud.google.com/sql/docs/mysql/configure-private-ip
+      - text: Configuring public IP connectivity for MySQL
+        url: https://cloud.google.com/sql/docs/mysql/private-ip
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-6
+          - gcp-cis1.1-6.5
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hippa-sql
+      - google cloud
+  - id: rule-gcp-150
+    title: Cloud SQL Database Instances Backups Enable
+    description: |
+      To lower the organization's attack surface, Cloud SQL databases should not have public IPs.
+      Private IPs provide improved network security and lower latency for your application.
+    remediation: |
+      List all Cloud SQL database instances using the following command:
+
+      ```
+      gcloud sql instances list
+      ```
+    validation: |-
+      For every instance of type instanceType: CLOUD_SQL_INSTANCE with backendType:
+      DESCRIBE
+
+      ```
+      gcloud sql instances describe INSTANCE_NAME
+      ```
+
+      Ensure that the setting ipAddresses has an IP address configured of type: PRIVATE
+      and has no IP address of type: PRIMARY . PRIMARY email addresses are public
+      addresses. An instance can have both a private and public address at the same time.
+      Note also that you cannot use private IP with First Generation instances.
+
+    impact: 8
+    effort: 3
+    platform: GCP
+    category: Network Access Control
+    resource: Cloud SQL
+    nodes:
+      - GCP_SQLADMIN_INSTANCE
+    refs:
+      - text: Configuring private IP connectivity for MySQL
+        url: https://cloud.google.com/sql/docs/mysql/configure-private-ip
+      - text: Configuring public IP connectivity for MySQL
+        url: https://cloud.google.com/sql/docs/mysql/private-ip
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-6
+          - gcp-cis1.1-6.5
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hippa-sql
+      - google cloud
+  - id: rule-gcp-151
+    title: GCS Buckets Should Have Labels
+    description:
+      Ensure that Cloud Storage buckets have labels
+    remediation: |-
+      It is recommended to use labels to your Cloud Storage resources.
+    validation: |-
+      For each bucket, verify that uniform bucket-level access is enabled..
+
+      ```
+      gsutil uniformbucketlevelaccess get gs://BUCKET_NAME/
+      ```
+      Use the on option in a uniformbucketlevelaccess set command:
+
+      ```
+      gsutil uniformbucketlevelaccess set on gs://BUCKET_NAME/
+      ```
+    impact: 9
+    effort: 2
+    platform: GCP
+    category: Identity and Access Management
+    resource: GCS
+    nodes:
+      - GCP_STORAGE_BUCKET
+    refs:
+      - text: Bucket Uniform Level Access
+        url: https://cloud.google.com/storage/docs/uniform-bucket-level-access
+      - text: Bucket Uniform Level Access
+        url: https://cloud.google.com/storage/docs/setting-org-policies#uniform-bucket
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.3
+          - gcp-cis1.3-level1
+          - gcp-cis1.3-1
+          - gcp-cis1.3-1.20
+      - nist-csf:
+          - nist-csf-PR.AC-3
+          - nist-csf-PR.AC-5
+          - nist-csf-PR.DS-5
+          - nist-csf-PR.PT-3
+      - hipaa:
+          - hipaa-164.308(a)(1)(ii)(B)
+          - hipaa-164.308(a)(3)(i)
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-152
+    title: GCS Buckets Should Have Versioning Enabled
+    description:
+      Ensure that Cloud Storage buckets have uniform bucket-level access
+      enabled
+    remediation: |-
+      It is recommended to use uniform bucket-level access to unify and simplify how you grant
+      access to your Cloud Storage resources.
+    validation: |-
+      For each bucket, verify that uniform bucket-level access is enabled..
+
+      ```
+      gsutil uniformbucketlevelaccess get gs://BUCKET_NAME/
+      ```
+      Use the on option in a uniformbucketlevelaccess set command:
+
+      ```
+      gsutil uniformbucketlevelaccess set on gs://BUCKET_NAME/
+      ```
+    impact: 9
+    effort: 2
+    platform: GCP
+    category: Identity and Access Management
+    resource: GCS
+    nodes:
+      - GCP_STORAGE_BUCKET
+    refs:
+      - text: Bucket Uniform Level Access
+        url: https://cloud.google.com/storage/docs/uniform-bucket-level-access
+      - text: Bucket Uniform Level Access
+        url: https://cloud.google.com/storage/docs/setting-org-policies#uniform-bucket
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.3
+          - gcp-cis1.3-level1
+          - gcp-cis1.3-1
+          - gcp-cis1.3-1.20
+      - nist-csf:
+          - nist-csf-PR.AC-3
+          - nist-csf-PR.AC-5
+          - nist-csf-PR.DS-5
+          - nist-csf-PR.PT-3
+      - hipaa:
+          - hipaa-164.308(a)(1)(ii)(B)
+          - hipaa-164.308(a)(3)(i)
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-153
+    title: GCS Buckets check location
+    description:
+      Ensure that Cloud Storage buckets are located in one place
+    remediation: |-
+      It is recommended to use store data in Cloud Storage with one location.
+    validation: |-
+      For each bucket, verify that uniform bucket-level access is enabled..
+
+      ```
+      gsutil uniformbucketlevelaccess get gs://BUCKET_NAME/
+      ```
+      Use the on option in a uniformbucketlevelaccess set command:
+
+      ```
+      gsutil uniformbucketlevelaccess set on gs://BUCKET_NAME/
+      ```
+    impact: 9
+    effort: 2
+    platform: GCP
+    category: Identity and Access Management
+    resource: GCS
+    nodes:
+      - GCP_STORAGE_BUCKET
+    refs:
+      - text: Bucket Uniform Level Access
+        url: https://cloud.google.com/storage/docs/uniform-bucket-level-access
+      - text: Bucket Uniform Level Access
+        url: https://cloud.google.com/storage/docs/setting-org-policies#uniform-bucket
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.3
+          - gcp-cis1.3-level1
+          - gcp-cis1.3-1
+          - gcp-cis1.3-1.20
+      - nist-csf:
+          - nist-csf-PR.AC-3
+          - nist-csf-PR.AC-5
+          - nist-csf-PR.DS-5
+          - nist-csf-PR.PT-3
+      - hipaa:
+          - hipaa-164.308(a)(1)(ii)(B)
+          - hipaa-164.308(a)(3)(i)
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-154
+    title: GCS Buckets With Lifecycle Policy Enabled
+    description:
+      Ensure that Cloud Storage buckets have lifecycle policy enabled
+    remediation: |-
+      It is recommended to use  lifecycle policy enabled.
+    validation: |-
+      For each bucket, verify lifecycle policy is enabled..
+
+      ```
+      gsutil lifecycle get gs://BUCKET_NAME/
+      ```
+      Use the on option in a lifecycle set command:
+
+      ```
+      gsutil lifecycle set LIFECYCLE_CONFIG_FILE gs://BUCKET_NAME/
+      ```
+    impact: 7
+    effort: 2
+    platform: GCP
+    category: Identity and Access Management
+    resource: GCS
+    nodes:
+      - GCP_STORAGE_BUCKET
+    refs:
+      - test: Bucket Lifecycle Polisy
+        url: https://cloud.google.com/storage/docs/managing-lifecycles
+      - text: Bucket Lifecycle Policy Managing
+        url: https://cloud.google.com/storage/docs/managing-lifecycles
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.3
+          - gcp-cis1.3-level1
+          - gcp-cis1.3-1
+          - gcp-cis1.3-1.20
+      - nist-csf:
+          - nist-csf-PR.AC-3
+          - nist-csf-PR.AC-5
+          - nist-csf-PR.DS-5
+          - nist-csf-PR.PT-3
+      - hipaa:
+          - hipaa-164.308(a)(1)(ii)(B)
+          - hipaa-164.308(a)(3)(i)
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-155
+    title: GCS Buckets With Logging Configuration
+    description:
+      The bucket's logging configuration, which defines the destination
+      bucket and optional name prefix for the current bucket's logs.
+    remediation: |-
+      It is recommended to use  logging enabled.
+    validation: |-
+      For each bucket, verify logging is enabled..
+
+      ```
+      gsutil logging get gs://BUCKET_NAME/
+      ```
+      Use the on option in a lifecycle set command:
+
+      ```
+      gcloud logging buckets create BUCKET_ID --location=LOCATION OPTIONAL_FLAGS
+      ```
+    impact: 7
+    effort: 2
+    platform: GCP
+    category: Logging and Access Management
+    resource: GCS
+    nodes:
+      - GCP_STORAGE_BUCKET
+    refs:
+      - test: Configure And Manage Log Buckets
+        url: https://cloud.google.com/logging/docs/buckets
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.3
+          - gcp-cis1.3-level1
+          - gcp-cis1.3-1
+          - gcp-cis1.3-1.20
+      - nist-csf:
+          - nist-csf-PR.AC-3
+          - nist-csf-PR.AC-5
+          - nist-csf-PR.DS-5
+          - nist-csf-PR.PT-3
+      - hipaa:
+          - hipaa-164.308(a)(1)(ii)(B)
+          - hipaa-164.308(a)(3)(i)
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-156
+    title: PubSub Usage Labels
+    description:
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+    validation: |-
+      To list PubSub topics.
+
+      ```
+      gcloud beta pubsub topics list
+      ```
+      Use the on option  cet labels in command:
+
+      ```
+      gcloud pubsub topics update mytopic --update-labels=KEY1=VAL1,KEY2=VAL2
+      ```
+    impact: 3
+    effort: 2
+    platform: GCP
+    category: GCP PubSub
+    resource: GCS
+    nodes:
+      - GCP_PUBSUB_TOPIC
+    refs:
+      - test: PubSub Topic Update
+        url: https://cloud.google.com/sdk/gcloud/reference/pubsub/topics/update
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.3
+          - gcp-cis1.3-level1
+          - gcp-cis1.3-1
+          - gcp-cis1.3-1.20
+      - nist-csf:
+          - nist-csf-PR.AC-3
+          - nist-csf-PR.AC-5
+          - nist-csf-PR.DS-5
+          - nist-csf-PR.PT-3
+      - hipaa:
+          - hipaa-164.308(a)(1)(ii)(B)
+          - hipaa-164.308(a)(3)(i)
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-157
+    title: PubSub Custom KmsKey Usage
+    description:
+      Pub/Sub uses the envelope encryption pattern with CMEK.
+      In this approach, the messages are not encrypted by Cloud KMS.
+    remediation: |-
+      Instead Cloud KMS is used to encrypt Data Encryption Keys (DEKs)
+      created by Pub/Sub for each topic. These DEKs are stored only in encrypted,
+      or wrapped, form by Pub/Sub. Before storing a DEK, the service sends the DEK
+      to Cloud KMS to be encrypted with the key encryption key (KEK) specified on the topic.
+      A new DEK is generated for each topic approximately every six hours.
+    validation: |-
+      To list PubSub topics.
+
+      ```
+      gcloud beta pubsub topics list
+      ```
+      Use the on option  cet labels in command:
+
+      ```
+      gcloud pubsub topics update mytopic \
+      --topic-encryption-key=projects/PROJECT_ID/locations/KMS_LOCATION/keyRings/KEYRING/cryptoKeys/KEY
+      ```
+    impact: 7
+    effort: 2
+    platform: GCP
+    category: GCP PubSub
+    resource: GCS
+    nodes:
+      - GCP_PUBSUB_TOPIC
+    refs:
+      - test: PubSub message encryption
+        url: https://cloud.google.com/pubsub/docs/encryption
+      - text: PubSub Use Customer-managed Encryption Keys
+        url: https://cloud.google.com/pubsub/docs/encryption#using-cmek
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.3
+          - gcp-cis1.3-level1
+          - gcp-cis1.3-1
+          - gcp-cis1.3-1.20
+      - nist-csf:
+          - nist-csf-PR.AC-3
+          - nist-csf-PR.AC-5
+          - nist-csf-PR.DS-5
+          - nist-csf-PR.PT-3
+      - hipaa:
+          - hipaa-164.308(a)(1)(ii)(B)
+          - hipaa-164.308(a)(3)(i)
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-158
+    title: Pub/Sub To Determine If Dead Lettering is enabled
+    description:
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+    validation: |-
+      Run pubsub subscriptions list command.
+      If the pubsub subscriptions describe command output returns null, as shown in the example
+      above, the selected Google Cloud Pub/Sub subscription does not have a dead-letter topic
+      configured to capture undeliverable messages.
+
+      ```
+      gcloud pubsub subscriptions list
+      gcloud pubsub subscriptions describe projects/PROJECT/subscriptions/SUBSCRIPTION
+          --format="json(deadLetterPolicy.deadLetterTopic)"
+      ```
+      Run pubsub subscriptions update command (Windows/macOS/Linux) using the ID of
+      the Pub/Sub subscription that you want to reconfigure as identifier parameter,
+      to enable dead lettering for the selected subscription:
+
+      ```
+      gcloud pubsub subscriptions update cc-customer-subscription
+          --dead-letter-topic=TOPIC
+          --max-delivery-attempts=10
+          --dead-letter-topic-project=PROJECT
+      ```
+    impact: 3
+    effort: 2
+    platform: GCP
+    category: GCP PubSub
+    resource: GCS
+    nodes:
+      - GCP_PUBSUB_SUBSCRIPTION
+    refs:
+      - test: PubSub Subscriptions Dead Letter Policy
+        url: https://cloud.google.com/pubsub/docs/reference/rest/v1/projects.subscriptions#DeadLetterPolicy
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.3
+          - gcp-cis1.3-level1
+          - gcp-cis1.3-1
+          - gcp-cis1.3-1.20
+      - nist-csf:
+          - nist-csf-PR.AC-3
+          - nist-csf-PR.AC-5
+          - nist-csf-PR.DS-5
+          - nist-csf-PR.PT-3
+      - hipaa:
+          - hipaa-164.308(a)(1)(ii)(B)
+          - hipaa-164.308(a)(3)(i)
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-159
+    title: PubSub Subscription Usage Labels
+    description:
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+    validation: |-
+      To list PubSub topics.
+
+      ```
+      gcloud beta pubsub topics list
+      ```
+      Use the on option  cet labels in command:
+
+      ```
+      gcloud pubsub topics update mytopic --update-labels=KEY1=VAL1,KEY2=VAL2
+      ```
+    impact: 3
+    effort: 2
+    platform: GCP
+    category: GCP PubSub
+    resource: GCS
+    nodes:
+      - GCP_PUBSUB_SUBSCRIPTION
+    refs:
+      - test: PubSub Lables
+        url: https://cloud.google.com/pubsub/docs/labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.3
+          - gcp-cis1.3-level1
+          - gcp-cis1.3-1
+          - gcp-cis1.3-1.20
+      - nist-csf:
+          - nist-csf-PR.AC-3
+          - nist-csf-PR.AC-5
+          - nist-csf-PR.DS-5
+          - nist-csf-PR.PT-3
+      - hipaa:
+          - hipaa-164.308(a)(1)(ii)(B)
+          - hipaa-164.308(a)(3)(i)
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-160
+    title: PubSub Snapshot Usage Labels
+    description:
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+    validation: |-
+      To list PubSub Snapshot.
+
+      ```
+      gcloud beta pubsub topics list
+      ```
+      Use the on option  cet labels in command:
+
+      ```
+      gcloud pubsub topics update mytopic --update-labels=KEY1=VAL1,KEY2=VAL2
+      ```
+    impact: 3
+    effort: 2
+    platform: GCP
+    category: GCP PubSub
+    resource: GCS
+    nodes:
+      - GCP_PUBSUB_SNAPSHOT
+    refs:
+      - test: PubSub Lables
+        url: https://cloud.google.com/pubsub/docs/labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.3
+          - gcp-cis1.3-level1
+          - gcp-cis1.3-1
+          - gcp-cis1.3-1.20
+      - nist-csf:
+          - nist-csf-PR.AC-3
+          - nist-csf-PR.AC-5
+          - nist-csf-PR.DS-5
+          - nist-csf-PR.PT-3
+      - hipaa:
+          - hipaa-164.308(a)(1)(ii)(B)
+          - hipaa-164.308(a)(3)(i)
+          - hipaa-164.312(a)(1)
+      - google cloud
+  - id: rule-gcp-161
+    title: Ensure That All BigQuery Datasets has Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      bq show --format=pretty mydataset
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: BigQuery Datasets
+    nodes:
+      - GCP_BIGQUERY_DATASET
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-162
+    title: Ensure That All BigQuery Tables has Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      bq show <table_object>
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: BigQuery
+    nodes:
+      - GCP_BIGQUERY_TABLE
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-163
+    title: Ensure That All BigQuery Models has Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      bq show <object>
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: BigQuery
+    nodes:
+      - GCP_BIGQUERY_MODEL
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-164
+    title: Ensure That All Bigtable Has Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+    validation: |-
+      Open the list of Bigtable instances in the Cloud Console.
+      Open the instance list
+      Check the box next to each instance whose labels you want to modify.
+      If the Labels panel is not visible, click Show info panel in the upper right corner to open it.
+      Add and update labels as needed.
+      To add a new label, click Add label, then type the key and value for the label.
+      To modify an existing label, update its value. You cannot change the key for an existing label.
+      Click Save to save your changes.
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: BigQuery
+    nodes:
+      - GCP_BIGTABLEADMIN_INSTANCE
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+      - text: Bigtable lable
+        url: https://cloud.google.com/bigtable/docs/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-165
+    title: Ensure That Dataflow Jobs have Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      gcloud dataflow jobs list
+      gcloud dataflow jobs describe JOB_ID
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: Dataflow
+    nodes:
+      - GCP_DATAFLOW_JOB
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-166
+    title: Ensure That Dataproc Jobs have Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      gcloud dataproc jobs list
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: Dataproc
+    nodes:
+      - GCP_DATAPROC_JOB
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+      - text: Dataproc Lables
+        url: https://cloud.google.com/dataproc/docs/guides/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-167
+    title: Ensure That Dataproc Claster Has Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      gcloud dataproc clusters list
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: Dataproc
+    nodes:
+      - GCP_DATAPROC_CLUSTER
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+      - text: Dataproc Lables
+        url: https://cloud.google.com/dataproc/docs/guides/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-168
+    title: Ensure That Cloud Key Management Service Has Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      gcloud kms keys describe key \
+          --keyring key-ring \
+          --location location
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: Dataflow
+    nodes:
+      - GCP_CLOUDKMS_CRYPTOKEY
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+      - text: KMS Labeling Keys
+        url: https://cloud.google.com/kms/docs/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-169
+    title: Ensure That Cloud Functions Have Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      gcloud functions list
+      gcloud beta functions describe
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: Cloud Function
+    nodes:
+      - GCP_CLOUDFUNCTIONS_CLOUDFUNCTION
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-170
+    title: Ensure That Cloud Spanner Resources Have Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      gcloud spanner instances list
+      gcloud spanner instances describe
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: Cloud Spanner
+    nodes:
+      - GCP_SPANNER_INSTANCE
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-171
+    title: Ensure That Compute Engine Instances Have Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      gcloud compute instances describe VM_NAME
+      gcloud compute instances add-labels VM_NAME \
+          --label=KEY=VALUE
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: Compute
+    nodes:
+      - GCP_COMPUTE_INSTANCE
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+      - text: Compute Manage Label
+        url: https://cloud.google.com/compute/docs/labeling-resources
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
+      - nist-csf:
+          - nist-csf-todo
+      - hipaa:
+          - hipaa-164.check
+      - google cloud
+  - id: rule-gcp-172
+    title: Ensure That Google Kubernetes Engine Cluster Have Labels
+    description: |
+      A label is a key-value pair that helps you organize your Google Cloud resources.
+    remediation: |-
+      Labels can be used as queryable annotations for resources, but can't be used to
+      set conditions on policies. Tags provide a way to conditionally allow or deny
+      policies based on whether a resource has a specific tag.
+
+    validation: |-
+      Verify the labels are present.
+
+      ```
+      gcloud container clusters describe [CLUSTER_NAME]
+
+      gcloud container clusters update CLUSTER_NAME \
+          [--region COMPUTE_REGION | --zone COMPUTE_ZONE] \
+          --update-labels KEY=VALUE
+      ```
+    impact: 2
+    effort: 3
+    platform: GCP
+    category: Identity and Access Management
+    resource: GKE
+    nodes:
+      - GCP_CONTAINER_CLUSTER
+    refs:
+      - text: Creating And Managing Labels
+        url: https://cloud.google.com/resource-manager/docs/creating-managing-labels
+      - text: Compute Manage Label
+        url: https://cloud.google.com/kubernetes-engine/docs/how-to/creating-managing-labels
+    public: true
+    tags:
+      - cis:
+          - gcp-cis1.1
+          - gcp-cis1.1-level1
+          - gcp-cis1.1-scored
+          - gcp-cis1.1-7
+          - gcp-cis1.1-7.1
       - nist-csf:
           - nist-csf-todo
       - hipaa:
