@@ -5352,10 +5352,11 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - hipaa:
-          - hipaa-164.check
+          - hipaa-164.312(e)(1)
+          - hipaa-164.312(e)(2)(ii)
       - google cloud
   - id: rule-gcp-143
-    title: Ensure That All BigQuery Tables Are Encrypted With Customer-Managed Encryption Key (CMEK)
+    title: Ensure That All BigQuery Dataset Are Encrypted With Customer-Managed Encryption Key (CMEK)
     description: |
       BigQuery by default encrypts the data as rest by employing Envelope Encryption using
       Google managed cryptographic keys. The data is encrypted using the data encryption
@@ -5401,7 +5402,8 @@ controls:
       - nist-csf:
           - nist-csf-todo
       - hipaa:
-          - hipaa-164.check
+          - hipaa-164.312(e)(1)
+          - hipaa-164.312(e)(2)(ii)
       - google cloud
   - id: rule-gcp-144
     title: HealthCare API Should Be Enabled
@@ -5854,18 +5856,15 @@ controls:
     description:
       Ensure that Cloud Storage buckets are located in one place
     remediation: |-
-      It is recommended to use store data in Cloud Storage with one location.
+      It is recommended to use store data in Cloud Storage with one location "US"
     validation: |-
-      For each bucket, verify that uniform bucket-level access is enabled..
+      For each bucket, verify location.
+      It should use US location
 
       ```
-      gsutil uniformbucketlevelaccess get gs://BUCKET_NAME/
+      gsutil ls -Lb gs://BUCKET_NAME/
       ```
-      Use the on option in a uniformbucketlevelaccess set command:
 
-      ```
-      gsutil uniformbucketlevelaccess set on gs://BUCKET_NAME/
-      ```
     impact: 9
     effort: 2
     platform: GCP
@@ -5874,10 +5873,8 @@ controls:
     nodes:
       - GCP_STORAGE_BUCKET
     refs:
-      - text: Bucket Uniform Level Access
-        url: https://cloud.google.com/storage/docs/uniform-bucket-level-access
-      - text: Bucket Uniform Level Access
-        url: https://cloud.google.com/storage/docs/setting-org-policies#uniform-bucket
+      - text: Bucket Locations
+        url: https://cloud.google.com/storage/docs/locations
     public: true
     tags:
       - cis:
