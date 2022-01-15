@@ -2639,29 +2639,29 @@ RSpec.describe "[#{control_id}] #{titles[control_id]}" do
   end
 end
 
-control_id = 'rule-gcp-142'
-RSpec.describe "[#{control_id}] #{titles[control_id]}" do
-  q = %s(
-    MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)-[:HAS_RESOURCE]->(table:GCP_BIGQUERY_TABLE)
-    RETURN project.name as project_name, project.resource_data_name as display_name, table.name as table_name, table.resource_data_encryptionConfiguration_kmsKeyName as kms_key
-  )
-  kmskeys = graphdb.query(q).mapped_results
-  if kmskeys.length > 0
-    kmskeys.each do |kmskey|
-      describe kmskey.table_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
-        it 'should not have KMS key access to projects or datasets' do
-          expect(kmskey.kms_key).not_to be_nil
-        end
-      end
-    end
-  else
-    describe kmskey.table_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
-      it 'should have kms keys access to projects or datasets' do
-        expect(true).to eq(true)
-      end
-    end
-  end
-end
+#control_id = 'rule-gcp-142'
+#RSpec.describe "[#{control_id}] #{titles[control_id]}" do
+#  q = %s(
+#    MATCH (project:GCP_CLOUDRESOURCEMANAGER_PROJECT)-[:HAS_RESOURCE]->(table:GCP_BIGQUERY_TABLE)
+#    RETURN project.name as project_name, project.resource_data_name as display_name, table.name as table_name, table.resource_data_encryptionConfiguration_kmsKeyName as kms_key
+#  )
+#  kmskeys = graphdb.query(q).mapped_results
+#  if kmskeys.length > 0
+#    kmskeys.each do |kmskey|
+#      describe kmskey.table_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+#        it 'should not have KMS key access to projects or datasets' do
+#          expect(kmskey.kms_key).not_to be_nil
+#        end
+#      end
+#    end
+#  else
+#    describe kmskey.table_name, control_pack: control_pack, control_id: control_id, "#{control_id}": true do
+#      it 'should have kms keys access to projects or datasets' do
+#        expect(true).to eq(true)
+#      end
+#    end
+#  end
+#end
 
 control_id = 'rule-gcp-143'
 RSpec.describe "[#{control_id}] #{titles[control_id]}" do
